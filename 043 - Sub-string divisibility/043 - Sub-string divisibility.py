@@ -14,6 +14,23 @@
 
 import itertools
 
-pandigitals = list(itertools.permutations([0,1,2,3,4,5,6,7,8,9]))
+#print len(pandigitals)
+#number = 1406357289
 
-print len(pandigitals)
+primes = [0,0,2,3,5,7,11,13,17]
+
+def isdivisible(number):
+	for i in range(2, 9):
+		print i, int(str(number)[i-1:i+2])
+		if int(str(number)[i-1:i+2]) % primes[i] != 0: return False
+	return True
+
+#print isdivisible(number)
+
+pandigitals = list(itertools.permutations([0,1,2,3,4,5,6,7,8,9]))
+divisibles = []
+for number in pandigitals:
+	if isdivisible(number) == True:
+		divisibles.append(number)
+
+print divisibles, sum(divisibles)
