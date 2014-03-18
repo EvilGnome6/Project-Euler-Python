@@ -15,8 +15,6 @@ for n in range(1, limit):
 	pnumbers.append((n*(3*n-1)/2))
 
 pnumset = set(pnumbers)
-#print pnumset
-#print pnumbers
 
 for i in range(0, limit-1):
 	for j in range(i, limit-1):
