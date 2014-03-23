@@ -40,7 +40,33 @@
 #How many hands does Player 1 win?
 
 pokerfile = open("poker.txt")
-line = pokerfile.readline()
-print line
-line = pokerfile.readline()
-print line
+deals = []
+
+while True:
+	line = pokerfile.readline()
+	if line == "": break
+	else: deals.append(pokerfile.readline())
+
+pokerfile.close()
+
+def getscore(deal):
+	cards = []
+	for i in range(0, 5):
+		number = deal[i*3]
+		if number == "T": cards.append([10])
+		elif number == "J": cards.append([11])
+		elif number == "Q": cards.append([12])
+		elif number == "K": cards.append([13])
+		elif number == "A": cards.append([14])
+		else: cards.append([int(number)])
+		suit = deal[i*3+1]
+		if suit == "C": cards[i].append(1)
+		if suit == "D": cards[i].append(2)
+		if suit == "H": cards[i].append(3)
+		if suit == "S": cards[i].append(4)
+		print cards
+		
+	return deal#, score
+	
+print getscore(deals[0][0:14])
+print getscore(deals[0][15:29])
