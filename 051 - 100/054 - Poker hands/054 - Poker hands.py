@@ -64,7 +64,7 @@ def getscore(deal):
 		if suit == "D": cards[i].append(2)
 		if suit == "H": cards[i].append(3)
 		if suit == "S": cards[i].append(4)
-		print cards
+	print cards
 		
 	return deal#, score
 	
