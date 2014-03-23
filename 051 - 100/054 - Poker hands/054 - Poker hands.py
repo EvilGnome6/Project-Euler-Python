@@ -51,6 +51,7 @@ pokerfile.close()
 
 def getscore(deal):
 	cards = []
+	score = []
 	for i in range(0, 5):
 		number = deal[i*3]
 		if number == "T": cards.append([10])
