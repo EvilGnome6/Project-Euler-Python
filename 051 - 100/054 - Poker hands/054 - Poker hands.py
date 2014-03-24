@@ -51,7 +51,7 @@ pokerfile.close()
 
 def getscore(deal):
 	cards = []
-	score = []
+	score = [0]*10
 	for i in range(0, 5):
 		number = deal[i*3]
 		if number == "T": cards.append([10])
@@ -65,9 +65,73 @@ def getscore(deal):
 		if suit == "D": cards[i].append(2)
 		if suit == "H": cards[i].append(3)
 		if suit == "S": cards[i].append(4)
-	print cards
+	print deal, cards
+	
+	#create lists of values and list of suits of the cards
+	values = []
+	suits = []
+	for i in range(0, 5):
+		values.append(cards[i][0])
+		suits.append(cards[i][1])
+	
+	#High Card: Highest value card.
+	score[9] = max(values)
+	
+	#One Pair: Two cards of the same value.
+	pair = 0
+	for i in range(2, 15):
+		if values.count(i) == 2:
+			if i > pair: pair = i
+	score[8] = pair
+	
+	#Two Pairs: Two different pairs.
+	pair = 0
+	for i in range(2, 15):
+		if values.count(i) == 2:
+			pair = i
+			for j in range(i+1, 15):
+				if values.count(j) == 2:
+					pair += j
+					score[7] = pair
+			break
+			
+	#Three of a Kind: Three cards of the same value.
+	for i in range(2, 15):
+		if values.count(i) == 3: score[6] = i
+	
+	#Straight: All cards are consecutive values.
+	streak = 0
+	for i in range(2, 15):
+		if streak == 5: break
+		if values.count(i) == 1:
+			streak = 1
+			for j in range(i+1, i+5):
+				if values.count(j) == 1:
+					streak += 1
+					if streak == 5: score[5] = j
+				else: break
+	
+	#Flush: All cards of the same suit.
+	flush = True
+	for i in range(0, 4):
+		if suits[i] != suits[i+1]: flush = False
+	if flush == True: score[4] = 1
+	
+	#Full House: Three of a kind and a pair.
+	if score[8] > 0 and score[9] > 0: score[3] = 1
+	
+	#Four of a Kind: Four cards of the same value.
+	for i in range(2, 15):
+		if values.count(i) == 4: score[2] = i
 		
-	return deal#, score
+	#Straight Flush: All cards are consecutive values of same suit.
+	if score[4] > 0 and score[5] > 0: score[1] = 1
+	
+	#Royal Flush: Ten, Jack, Queen, King, Ace, in same suit.
+	if score[1] == 1 and score[5] == 14: score[0] = 1
+	
+	return score
 	
 print getscore(deals[0][0:14])
 print getscore(deals[0][15:29])
+print getscore("TC JC QC KC AC")
