@@ -118,7 +118,7 @@ def getscore(deal):
 	if flush == True: score[4] = 1
 	
 	#Full House: Three of a kind and a pair.
-	if score[8] > 0 and score[9] > 0: score[3] = 1
+	if score[6] > 0 and score[8] > 0: score[3] = 1
 	
 	#Four of a Kind: Four cards of the same value.
 	for i in range(2, 15):
@@ -131,7 +131,57 @@ def getscore(deal):
 	if score[1] == 1 and score[5] == 14: score[0] = 1
 	
 	return score
+
+p1wins = 0
+p2wins = 0
+
+for i in range(0, 1):
+	#player1 = getscore(deals[i][0:14])
+	player1 = getscore("2C 3C 5C 7C JC")
+	print player1
+	player2 = getscore("4C 6C 8C TC JC")
+	#player2 = getscore(deals[i][15:29])
+	print player2
 	
-print getscore(deals[0][0:14])
-print getscore(deals[0][15:29])
-print getscore("TC JC QC KC AC")
+	if player1[0] > 0 or player2[0] > 0: #Royal Flush
+		if player1[0] > player2[0]: p1wins += 1
+		if player2[0] > player1[0]: p2wins += 1
+
+	elif player1[1] > 0 or player2[1] > 0: #Straight Flush
+		if player1[1] > player2[1]: p1wins += 1
+		if player2[1] > player1[1]: p2wins += 1
+		if player1[1] == player2[1]:
+			if player1[9] > player2[9]: p1wins += 1 #High Card is tie breaker
+			if player2[9] > player1[9]: p2wins += 1
+
+	elif player1[2] > 0 or player2[2] > 0: #Four of a Kind
+		if player1[2] > player2[2]: p1wins += 1
+		if player2[2] > player1[2]: p2wins += 1
+		if player1[2] == player2[2]:
+			if player1[9] > player2[9]: p1wins += 1 #High Card is tie breaker
+			if player2[9] > player1[9]: p2wins += 1
+
+	elif player1[3] > 0 or player2[3] > 0: #Full House
+		if player1[3] > player2[3]: p1wins += 1 
+		if player2[3] > player1[3]: p2wins += 1
+		if player1[3] == player2[3]:
+			if player1[6] > player2[6]: p1wins += 1 #Three of a Kind is tie breaker
+			if player2[6] > player1[6]: p2wins += 1
+			if player1[6] == player2[6]:
+				if player1[8] > player2[8]: p1wins += 1 #One Pair is tie breaker
+				if player2[8] > player1[8]: p2wins += 1
+	
+	if player1[4] > 0 or player2[4] > 0: #Flush
+		if player1[4] > player2[4]: p1wins += 1
+		if player2[4] > player1[4]: p2wins += 1
+		if player1[4] == player2[4]:
+			if player1[9] > player2[9]: p1wins += 1 #High Card is tie breaker
+			if player2[9] > player1[9]: p2wins += 1
+			if player1[9] == player2[9]: print "Flush tie"
+			
+
+print p1wins, p2wins
+
+#print getscore(deals[0][0:14])
+#print getscore(deals[0][15:29])
+#print getscore("TC JC QC KC AC")
