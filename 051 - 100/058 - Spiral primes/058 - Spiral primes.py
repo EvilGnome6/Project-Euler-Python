@@ -14,7 +14,8 @@
 #If one complete new layer is wrapped around the spiral above, a square spiral with side length 9 will be formed. If this process is continued, what is the side length of the square spiral for which the ratio of primes along both diagonals first falls below 10%?
 
 def isprime(number):
-	for i in range(2, int(number**0.5)+1, 1):
+	if number % 2 == 0: return False
+	for i in range(3, int(number**0.5)+1, 2):
 		if number % i == 0: return False
 	return True
 	
