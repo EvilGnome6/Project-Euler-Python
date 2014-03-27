@@ -13,25 +13,25 @@
 
 #If one complete new layer is wrapped around the spiral above, a square spiral with side length 9 will be formed. If this process is continued, what is the side length of the square spiral for which the ratio of primes along both diagonals first falls below 10%?
 
-limit = 100
-primeset = set()
-sieve = [True] * limit
-
-for i in range(2, limit):
-	if sieve[i] == True:
-		primeset.add(i)
-		for j in range(i*2, limit, i):
-			sieve[j] = False
-
-print primeset
-
+def isprime(number):
+	for i in range(2, int(number**0.5)+1, 1):
+		if number % i == 0: return False
+	return True
+	
 layer = 1
 diags = [1,1,1,1]
+diagprimes = []
+
 while True:
 	diags[0] = diags[3] + (layer * 2)
 	diags[1] = diags[0] + (layer * 2)
 	diags[2] = diags[1] + (layer * 2)
 	diags[3] = diags[2] + (layer * 2)
+	for diag in diags:
+		if isprime(diag) == True: diagprimes.append(diag)
+	pctprime = len(diagprimes)*100/float(((layer*4)+1))
 	layer += 1
-	print layer, diags
-	if layer == 4: break
+	length = (layer-1)*2+1
+	if pctprime < 10: 
+		print length, diags, pctprime
+		break
