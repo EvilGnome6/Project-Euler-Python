@@ -10,4 +10,33 @@
 
 from operator import xor
 
-print xor(65, 42), xor(107, 42)
+cipher=[int(i) for i in file('cipher1.txt', 'r').read().split(',')]
+
+garbage = ["}", "`", "&"]
+stop = False
+
+for a in range(97, 123):
+	if stop == True: break
+	for b in range(97, 123):
+		if stop == True: break
+		for c in range(97, 123):
+			message = ""
+			key = [a, b, c] * 401
+			for i in range(0,1201):
+				message += chr(xor(cipher[i], key[i]))
+			good = True
+			for char in garbage:
+				if char in message: 
+					good = False
+					break
+			if good == True: 
+				print chr(a), chr(b), chr(c)
+				print message
+				stop = True
+				break
+
+total = 0
+for char in message:
+	total += ord(char)
+print total
+
