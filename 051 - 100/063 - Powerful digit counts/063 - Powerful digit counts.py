@@ -2,14 +2,10 @@
 
 #How many n-digit positive integers exist which are also an nth power?
 
-results = set()
-
+count = 0
 for base in range(1, 10):
 	for expo in range(1, 22):
 		number = base**expo
 		if len(str(number)) == expo:
-			results.add(number)
-			print number, base, expo
-		if len(str(number)) >> expo: break
-
-print len(results)
+			count += 1
+			print count, base, expo, number
