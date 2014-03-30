@@ -15,35 +15,78 @@
 
 #Find the sum of the only ordered set of six cyclic 4-digit numbers for which each polygonal type: triangle, square, pentagonal, hexagonal, heptagonal, and octagonal, is represented by a different number in the set.
 
-trinums = []
+import itertools
+
+trinums = ['Triangle']
 for n in range(10000):
 	number = (n*(n+1))/2
 	if number > 9999: break
 	if number > 999: trinums.append(number)
 
 
-squnums = []
+squnums = ['Square']
 for n in range(10000):
 	number = n**2
 	if number > 9999: break
 	if number > 999: squnums.append(number)
 
-pennums = []
+pennums = ['Pentagonal']
 for n in range(10000):
 	number = (n*((3*n)-1))/2
 	if number > 9999: break
 	if number > 999: pennums.append(number)
+
+hexnums = ['Hexagonal']
+for n in range(10000):
+	number = n*((2*n)-1)
+	if number > 9999: break
+	if number > 999: hexnums.append(number)
+
+hepnums = ['Heptagonal']
+for n in range(10000):
+	number = n*((5*n)-3)/2
+	if number > 9999: break
+	if number > 999: hepnums.append(number)
 	
-for trinum in trinums:
-	ftri = str(trinum)[:2]
-	ltri = str(trinum)[2:4]
-	for squnum in squnums:
-		fsqu = str(squnum)[:2]
-		lsqu = str(squnum)[2:4]
-		if ltri == fsqu:
-			print trinum, squnum
-			for pennum in pennums:
-				fpen = str(pennum)[:2]
-				lpen = str(pennum)[2:4]
-				#if fpen == lsqu
-				
+octnums = ['Octagonal']
+for n in range(10000):
+	number = n*((3*n)-2)
+	if number > 9999: break
+	if number > 999: octnums.append(number)
+
+def cycle(set1, set2, set3, set4, set5, set6):
+	for number1 in set1:
+		fset1 = str(number1)[:2]
+		lset1 = str(number1)[2:4]
+		for number2 in set2:
+			fset2 = str(number2)[:2]
+			lset2 = str(number2)[2:4]
+			if fset2 == lset1:
+				for number3 in set3:
+					fset3 = str(number3)[:2]
+					lset3 = str(number3)[2:4]
+					if fset3 == lset2:
+						for number4 in set4:
+							fset4 = str(number4)[:2]
+							lset4 = str(number4)[2:4]
+							if fset4 == lset3:
+								for number5 in set5:
+									fset5 = str(number5)[:2]
+									lset5 = str(number5)[2:4]
+									if fset5 == lset4:
+										for number6 in set6:
+											fset6 = str(number6)[:2]
+											lset6 = str(number6)[2:4]
+											if fset6 == lset5 and lset6 == fset1:
+												numsum = number1 + number2 + number3 + number4 + number5 + number6
+												print number1, number2, number3, number4, number5, number6, numsum
+												return True
+	return False
+
+perms = list(itertools.permutations([trinums,squnums,pennums,hexnums,hepnums,octnums]))
+
+for perm in perms:
+	result = cycle(perm[0], perm[1], perm[2], perm[3], perm[4], perm[5])
+	if result == True: 
+		print perm[0][0], perm[1][0], perm[2][0], perm[3][0], perm[4][0], perm[5][0]
+		break
