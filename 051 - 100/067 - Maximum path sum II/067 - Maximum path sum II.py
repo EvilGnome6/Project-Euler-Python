@@ -16,8 +16,7 @@ file = open("triangle.txt")
 
 for i in range(100):
 	line = file.readline()
-	line = line.rstrip()
-	row = line.split(' ')
+	row = map(int, line.split(' '))
 	triangle.append(row)
 
 file.close()
