@@ -11,14 +11,19 @@
 
 #NOTE: This is a much more difficult version of Problem 18. It is not possible to try every route to solve this problem, as there are 299 altogether! If you could check one trillion (1012) routes every second it would take over twenty billion years to check them all. There is an efficient algorithm to solve it. ;o)
 
+rows = 100
 triangle = []
 file = open("triangle.txt")
 
-for i in range(100):
+for i in range(rows):
 	line = file.readline()
 	row = map(int, line.split(' '))
 	triangle.append(row)
 
 file.close()
 
-print triangle[98]
+for i in range(1, rows):
+	for j in range(len(triangle[rows-i-1])):
+		triangle[rows-i-1][j] = triangle[rows-i-1][j] + max(triangle[rows-i][j], triangle[rows-i][j+1])
+		
+print triangle[0]
