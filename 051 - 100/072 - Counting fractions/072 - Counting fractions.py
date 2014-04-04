@@ -12,11 +12,10 @@
 limit = 1000000
 
 fractions = range(0, limit+1)
-fractions[1] = 0
 
-for i in range(2, limit+1):
-	if fractions[i] == i:
-		for j in range(i, limit+1, i):
-			fractions[j] = fractions[j] / i * (i-1)
-
+for i in range(1, limit+1):
+	fractions[i] -= 1
+	for j in range(i*2, limit+1, i):
+		fractions[j] -= fractions[i]
+		
 print sum(fractions)
