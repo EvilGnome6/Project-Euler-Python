@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 #Consider the fraction, n/d, where n and d are positive integers. If n<d and HCF(n,d)=1, it is called a reduced proper fraction.
 
 #If we list the set of reduced proper fractions for d ≤ 8 in ascending order of size, we get:
@@ -8,16 +9,30 @@
 
 #How many fractions lie between 1/3 and 1/2 in the sorted set of reduced proper fractions for d ≤ 12,000?
 
-"5235y7u
-#//////////////////.\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"
-limit = 8
+limit = 12000
 
-fractions = [[0],[0]]
+def farey(limit):
+	count = 0
+	a = 0
+	b = 1
+	c = 1
+	d = limit
+	n = limit
 
-for i in range(2, limit+1):
-	fractions.append(range(1, i))
-
-for i in range(2, limit+1):
-	for nume in fractions[i]:
-		for j in range(nume*2, limit, nume):
-			fractions[j].remove(nume)
+	while True:
+		k = (n + b) / d
+		p = (k * c) - a
+		q = (k * d) - b
+		a, b = c, d
+		c, d = p, q
+		if c==1 and d==3:
+			while True:
+				k = (n + b) / d
+				p = (k * c) - a
+				q = (k * d) - b
+				a, b = c, d
+				c, d = p, q
+				if c==1 and d==2: return count
+				count += 1
+	
+print farey(limit)
