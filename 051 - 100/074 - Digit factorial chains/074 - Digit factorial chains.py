@@ -19,10 +19,9 @@
 
 #How many chains, with a starting number below one million, contain exactly sixty non-repeating terms?
 
-limit = 10000
+limit = 9742
 
 import math
-import itertools
 
 def nextfactorial(number):
 	nextnum = 0
@@ -31,52 +30,29 @@ def nextfactorial(number):
 		nextnum += math.factorial(int(num))
 	return nextnum
 
-def getfactchain(number):
+def getchain(number):
 	chain = [number]
 	while True:
 		number = nextfactorial(number)
 		if number in chain:
-			chain.append(number)
+#			chain.append(number)
 			return chain
 		chain.append(number)
 
 count = 0
 skipped = 0
-factchains = dict()
+match = set()
+other = set()
 
-for i in range(3, limit):
-	sortnum = int(''.join(sorted(str(i))))
-	print sortnum
-	if sortnum in factchains:
-		length = factchains[sortnum]
-		factchains.update({i:length})
-		if length == 60:
-			count += 1
-	
-	if i not in factchains:
-		chain = getfactchain(i)
-		repnum = chain[-1]
-		reppos = chain.index(repnum)
-		length = len(chain)-1
-#		print chain, repnum, reppos, length
-		for j in range(0, len(chain)):
-			sortnum = int(''.join(sorted(str(chain[j]))))
-			if j < reppos:
-				factchains.update({chain[j]:(length)-j})
-				if length - j == 60: count += 1
-				if "0" not in str(sortnum):
-					factchains.update({sortnum:(length-j)})
-					if length - j == 60: count += 1
-			if j > reppos:
-				factchains.update({chain[j]:length-reppos})
-				if length - reppos == 60: count += 1
-				if "0" not in str(sortnum):
-					factchains.update({sortnum:length-reppos})
-					if length-reppos == 60: count += 1
+for number in range(3, limit):
+	if number in other: skipped += 1
+	else:
+		chain = getchain(number)
+		if len(chain) == 60: match.add(number)
+		for j in range(1, len(chain)):
+			other.add(chain[j])
+			
+#print match, other
+#print len(getchain(1479))
+print len(match), skipped, match
 
-	else: skipped += 1
-
-#for chain in factchains:
-#	print chain, factchains[chain]
-
-print count, skipped
