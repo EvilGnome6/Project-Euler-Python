@@ -19,7 +19,7 @@
 
 #How many chains, with a starting number below one million, contain exactly sixty non-repeating terms?
 
-limit = 6
+limit = 1000000
 
 facts = dict({0:1, 1:1, 2:2, 3:6, 4:24, 5:120, 6:720, 7:5040, 8:40320, 9:362880})
 
@@ -40,8 +40,7 @@ for i in range(3, limit):
 	
 	while True:
 		if number in cache:
-			length = cache[number]
-			print number, length
+			length = cache[number]-1
 			break
 		else: 
 			number = getfactsum(number)
@@ -50,14 +49,9 @@ for i in range(3, limit):
 	
 	if len(chain) + length == 60: 
 		count += 1
-#		print chain
 	
 	for num in range(0,len(chain)):
-		cache.update({chain[num]:len(chain)-num+length})
+		cache.update({chain[num]:len(chain)-num+(length)})
 		if num == number: break
 	
-	print chain, cache
-
-#for num in cache:
-#	print num, cache[num]
-print count, len(cache)
+print count
