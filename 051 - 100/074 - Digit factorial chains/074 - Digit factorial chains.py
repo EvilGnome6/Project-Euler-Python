@@ -19,40 +19,26 @@
 
 #How many chains, with a starting number below one million, contain exactly sixty non-repeating terms?
 
-limit = 9742
+limit = 100000
 
-import math
+facts = dict({0:1, 1:1, 2:2, 3:6, 4:24, 5:120, 6:720, 7:5040, 8:40320, 9:362880})
 
-def nextfactorial(number):
-	nextnum = 0
-	numstring = str(number)
-	for num in numstring:
-		nextnum += math.factorial(int(num))
-	return nextnum
-
-def getchain(number):
-	chain = [number]
-	while True:
-		number = nextfactorial(number)
-		if number in chain:
-#			chain.append(number)
-			return chain
-		chain.append(number)
+def getfactsum(number):
+	factsum = 0
+	while number > 0:
+		factsum += facts[number % 10]
+		number /= 10
+	return factsum
 
 count = 0
-skipped = 0
-match = set()
-other = set()
+		
+for i in range(3, limit):
+	number = i
+	chain = [number]
+	while True:
+		number = getfactsum(number)
+		if number in chain: break
+		else: chain.append(number)
+	if len(chain) == 60: count += 1
 
-for number in range(3, limit):
-	if number in other: skipped += 1
-	else:
-		chain = getchain(number)
-		if len(chain) == 60: match.add(number)
-		for j in range(1, len(chain)):
-			other.add(chain[j])
-			
-#print match, other
-#print len(getchain(1479))
-print len(match), skipped, match
-
+print count
