@@ -21,6 +21,8 @@
 
 import math
 
+limit = 20
+
 def nextfactorial(number):
 	nextnum = 0
 	numstring = str(number)
@@ -32,8 +34,14 @@ def factorialchain(number):
 	chain = [number]
 	while True:
 		number = nextfactorial(number)
-		if number in chain: return chain
+		if number in chain:
+			chain.append(number)
+			return chain
 		chain.append(number)
 
-factorialchains = [[0]] * 10
+factorialchains = [[0]] * limit
+
+for i in range(3, limit):
+	print factorialchain(i)
+
 
