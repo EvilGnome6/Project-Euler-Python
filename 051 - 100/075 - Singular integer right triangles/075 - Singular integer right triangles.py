@@ -19,8 +19,8 @@
 #k = (n + b)/d, p = kc − a and q = kd − b
 
 def farey(n):
-	a,b = 0,1
-	c,d = 1,n
+	a,b = 1,n
+	c,d = 1,n-1
 	primes = [[a,b],[c,d]]
 	while c <= n:
 		k = (n+b)/d
@@ -28,4 +28,14 @@ def farey(n):
 		primes.append([c,d])
 	return primes
 	
-print farey(10)
+coprimes = farey(10)
+
+for pair in coprimes:
+	m, n = pair[1], pair[0]
+	if m < n: m, n = n, m
+	if (m-n) % 2 != 0:
+		a = m**2 - n**2
+		b = 2*m*n
+		c = m**2 + n**2
+		print m, n, a, b, c, a+b+c
+	
