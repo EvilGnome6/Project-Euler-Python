@@ -14,28 +14,26 @@
 
 #Given that L is the length of the wire, for how many values of L ≤ 1,500,000 can exactly one integer sided right angle triangle be formed?
 
-#http://en.wikipedia.org/wiki/Farey_sequence
-#a/b and c/d are the two given entries, and p/q is the unknown next entry
-#k = (n + b)/d, p = kc − a and q = kd − b
+#Euclid's formulae for a Pythagorean triple:
+# a = m^2 - n^2, b = 2mn, c = m^2 + n^2
+# p = a + b + c = 2m^2 + 2mn
 
-def farey(n):
-	a,b = 1,n
-	c,d = 1,n-1
-	primes = [[a,b],[c,d]]
-	while c <= n:
-		k = (n+b)/d
-		a,b,c,d = c,d,k*c-a,k*d-b
-		primes.append([c,d])
-	return primes
-	
-coprimes = farey(10)
+from fractions import gcd
 
-for pair in coprimes:
-	m, n = pair[1], pair[0]
-	if m < n: m, n = n, m
-	if (m-n) % 2 != 0:
-		a = m**2 - n**2
-		b = 2*m*n
-		c = m**2 + n**2
-		print m, n, a, b, c, a+b+c
-	
+limit = 1500000
+
+perimeters = [0] * (limit+1)
+
+for m in range(1, 900):
+	for n in range(1, 900):
+		if m > n and ((m+n) % 2) == 1 and gcd(m,n) == 1:
+			p = 2 * m * ( m + n )
+			if p == 120: print m, n, p
+			if p > limit: break
+			for i in range(p, limit, p):
+				perimeters[i] += 1
+			
+print perimeters.count(1)
+
+#for i in range(121):
+#	if perimeters[i] != 0: print i, perimeters[i]
