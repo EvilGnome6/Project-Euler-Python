@@ -34,6 +34,3 @@ for m in range(1, 900):
 				perimeters[i] += 1
 			
 print perimeters.count(1)
-
-#for i in range(121):
-#	if perimeters[i] != 0: print i, perimeters[i]
