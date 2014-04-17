@@ -26,11 +26,11 @@ part = parts[k-pents[0]] + parts[k-pents[1]]
 parts.append(part)
 
 k = 3
-part = parts[k-pents[0]] + parts[k-pents[1]] - parts[k-pents[2]]
+part = parts[k-pents[0]] + parts[k-pents[1]]# - parts[k-pents[2]]
 parts.append(part)
 
 k = 4
-part = parts[k-pents[0]] + parts[k-pents[1]] - parts[k-pents[2]] - parts[k-pents[3]]
+part = parts[k-pents[0]] + parts[k-pents[1]]# - parts[k-pents[2]] - parts[k-pents[3]]
 parts.append(part)
 	
 print parts
