@@ -31,6 +31,13 @@ parts.append(part)
 
 k = 4
 part = parts[k-pents[0]] + parts[k-pents[1]]# - parts[k-pents[2]] - parts[k-pents[3]]
+<<<<<<< HEAD
+=======
+parts.append(part)
+
+k = 5
+part = parts[k-pents[0]] + parts[k-pents[1]] - parts[k-pents[2]]# - parts[k-pents[3]] + parts[k-pents[4]]
+>>>>>>> FETCH_HEAD
 parts.append(part)
 	
 print parts
