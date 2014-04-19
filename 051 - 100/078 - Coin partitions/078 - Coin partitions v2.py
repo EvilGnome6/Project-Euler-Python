@@ -15,29 +15,43 @@ print pents
 #p(k) = p(k − 1) + p(k − 2) − p(k − 5) − p(k − 7) + p(k − 12) + p(k − 15) − p(k − 22) − ...
 #where p(0) is taken to equal 1, and p(k) is taken to be zero for negative k.
 
+sign = [1,1,-1,-1]
 parts = [1]
 
-k = 1
-part = parts[k-pents[0]]
-parts.append(part)
+for k in range(1, 2):
+	part = 0
 
-k = 2
-part = parts[k-pents[0]] + parts[k-pents[1]]
-parts.append(part)
+	for i in range(0, 2):
+		s = sign[i%4]
+		p = parts[k-pents[i]]
+		print k, i, pents[i], s, p
+		if p < 1 : break
+		part += s*p
 
-k = 3
-part = parts[k-pents[0]] + parts[k-pents[1]]# - parts[k-pents[2]]
-parts.append(part)
+	parts.append(part)
 
-k = 4
-part = parts[k-pents[0]] + parts[k-pents[1]]# - parts[k-pents[2]] - parts[k-pents[3]]
-<<<<<<< HEAD
-=======
-parts.append(part)
 
-k = 5
-part = parts[k-pents[0]] + parts[k-pents[1]] - parts[k-pents[2]]# - parts[k-pents[3]] + parts[k-pents[4]]
->>>>>>> FETCH_HEAD
-parts.append(part)
-	
-print parts
+
+
+
+	k = 1
+	part = parts[k-pents[0]]
+	parts.append(part)
+
+	k = 2
+	part = parts[k-pents[0]] + parts[k-pents[1]]
+	parts.append(part)
+
+	k = 3
+	part = parts[k-pents[0]] + parts[k-pents[1]]# - parts[k-pents[2]]
+	parts.append(part)
+
+	k = 4
+	part = parts[k-pents[0]] + parts[k-pents[1]]# - parts[k-pents[2]] - parts[k-pents[3]]
+	parts.append(part)
+
+	k = 5
+	part = parts[k-pents[0]] + parts[k-pents[1]] - parts[k-pents[2]]# - parts[k-pents[3]] + parts[k-pents[4]]
+	parts.append(part)
+		
+	print parts
