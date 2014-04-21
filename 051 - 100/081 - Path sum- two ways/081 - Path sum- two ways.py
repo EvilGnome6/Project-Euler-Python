@@ -25,9 +25,6 @@ file.close()
 
 rows = len(matrix)
 
-#for row in matrix: print row
-#print " "
-
 #sum the path cost on the bottom row from right to left
 #sum the path cost on the righ column from bottom to top
 
@@ -35,16 +32,10 @@ for i in range(rows-2, -1, -1):
 	matrix[rows-1][i] += matrix[rows-1][i+1]
 	matrix[i][rows-1] += matrix[i+1][rows-1]
 
-#for row in matrix: print row
-#print " "
-
 #work up from second to last row, from right to left, choosing least cost path
 
 for i in range(rows-2, -1, -1):
 	for j in range(rows-2, -1, -1):
 		matrix[i][j] += min(matrix[i+1][j], matrix[i][j+1])
-
-#for row in matrix: print row
-#print " "
 
 print matrix[0][0]
