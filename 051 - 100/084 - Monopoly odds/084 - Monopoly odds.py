@@ -19,19 +19,19 @@
 #At the beginning of the game, the CC and CH cards are shuffled. When a player lands on CC or CH they take a card from the top of the respective pile and, after following the instructions, it is returned to the bottom of the pile. There are sixteen cards in each pile, but for the purpose of this problem we are only concerned with cards that order a movement; any instruction not concerned with movement will be ignored and the player will remain on the CC/CH square.
 
 #    Community Chest (2/16 cards):
-#        Advance to GO
-#        Go to JAIL
+#        1) Advance to GO
+#        2) Go to JAIL
 #    Chance (10/16 cards):
-#        Advance to GO
-#        Go to JAIL
-#        Go to C1
-#        Go to E3
-#        Go to H2
-#        Go to R1
-#        Go to next R (railway company)
-#        Go to next R
-#        Go to next U (utility company)
-#        Go back 3 squares.
+#        1) Advance to GO
+#        2) Go to JAIL
+#        3) Go to C1
+#        4) Go to E3
+#        5) Go to H2
+#        6) Go to R1
+#        7) Go to next R (railway company)
+#        8) Go to next R
+#        9) Go to next U (utility company)
+#        10) Go back 3 squares.
 
 #The heart of this problem concerns the likelihood of visiting a particular square. That is, the probability of finishing at that square after a roll. For this reason it should be clear that, with the exception of G2J for which the probability of finishing on it is zero, the CH squares will have the lowest probabilities, as 5/8 request a movement to another square, and it is the final square that the player finishes at on each roll that we are interested in. We shall make no distinction between "Just Visiting" and being sent to JAIL, and we shall also ignore the rule about requiring a double to "get out of jail", assuming that they pay to get out on their next turn.
 
@@ -41,12 +41,76 @@
 
 #If, instead of using two 6-sided dice, two 4-sided dice are used, find the six-digit modal string.
 
-from random import randrange
+from random import randint
 
 board = [0]*40
-print board
 
-def roll():
-	return randrange(7) + randrange(7)
+def rolldice():
+	return randint(1,4)
 
-print roll()
+def nextsquare(roll):
+	die1, die2 = rolldice(), rolldice()
+	roll[0] += die1 + die2
+	if roll[0] > 39: roll[0] -= 40
+	
+	#if you roll three doubles then go to jail
+	if die1 == die2: roll[1] += 1
+	else: roll[1] = 0
+	if roll[1] == 3:
+		roll[0] = 10
+		return roll
+	
+	#if you land on chance draw card
+	if roll[0] == 7 or roll[0] == 22 or roll[0] == 36:
+		card = randint(1,16)
+		if card == 1: roll[0] = 0
+		if card == 2: roll[0] = 10
+		if card == 3: roll[0] = 11
+		if card == 4: roll[0] = 24
+		if card == 5: roll[0] = 39
+		if card == 6: roll[0] = 5
+		if card == 7 or card == 8:
+			if roll[0] == 7: roll[0] = 15
+			if roll[0] == 22: roll[0] = 25
+			if roll[0] == 36: roll[0] = 5
+		if card == 9:
+			if roll[0] == 7: roll[0] = 12
+			if roll[0] == 22: roll[0] = 28
+			if roll[0] == 36: roll[0] = 12
+		if card == 10: roll[0] -= 3
+	
+	#if you land on community chest draw card
+	if roll[0] == 2 or roll[0] == 17 or roll[0] == 33:
+		card = randint(1,16)
+		if card == 1: roll[0] = 0
+		if card == 2: roll[0] = 10
+	
+	#if you land on Go To Jail then go to jail
+	if roll[0] == 30:
+		roll[0] = 10
+		return roll
+	
+	return roll
+
+roll = [0,0]
+for i in range(1000000):
+	roll = nextsquare(roll)
+	square = roll[0]
+	board[square] += 1
+
+#find the three most visited squares
+
+square1 = max(board)
+square2 = 0
+square3 = 0
+for square in board:
+	if square > square2 and square < square1: square2 = square
+for square in board:
+	if square > square3 and square < square2: square3 = square
+
+square1 = board.index(square1)
+square2 = board.index(square2)
+square3 = board.index(square3)
+
+print str(square1)+str(square2)+str(square3)
+
