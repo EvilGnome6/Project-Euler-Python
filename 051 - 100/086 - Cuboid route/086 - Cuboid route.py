@@ -7,7 +7,7 @@
 
 #Find the least value of M such that the number of solutions first exceeds one million.
 
-target = 1000000
+target = 10**6
 count = 0
 l = 2
 
