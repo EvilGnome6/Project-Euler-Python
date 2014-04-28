@@ -19,10 +19,55 @@ In fact, as the complete set of minimal product-sum numbers for 2≤k≤12 is {4
 What is the sum of all the minimal product-sum numbers for 2≤k≤12000?
 '''
 
-limit = 6
-kset = [0] * (limit+1)
+limit = 24000
 
-for psum in range(2, (limit*2)+1):
-	psum = psum
+minsum = [0] * 24001
+
+def getfactors(number):
+	factors = []
+	for i in range(2, int(number**0.5)+1):
+		f = []
+		if number % i == 0:
+			f.append(i)
+			f.append(number/i)
+			factors.append(f)
+	nextf = []
+	for f in factors:
+		nf = nextfactors(f)
+		for n in nf:
+			if n not in factors: factors.append(n)
+	return factors
+
+def nextfactors(factors):
+	nextf = []
+	lastnum = factors[-1]
+	for i in range(2, int(lastnum**0.5)+1):
+		if lastnum % i == 0:
+			f = list(factors)
+			f[-1] = i
+			f.append(lastnum/i)
+			f.sort()
+			nextf.append(f)
+	return nextf
+
+def minpsum(factors):
+	for f in factors:
+		fprod = 1
+		for n in f: fprod *= n
+		fsum = sum(f)
+		k = fprod - fsum + len(f)
+		if minsum[k] == 0:
+			minsum[k] = fprod
+		elif minsum[k] > fprod:
+			minsum[k] = fprod
+
+for i in range(4, limit):
+	factors = getfactors(i)
+	minpsum(factors)
+
+minset = set()
+
+for m in range(2,12001):
+	minset.add(minsum[m])
 	
-print kset
+print sum(minset)
