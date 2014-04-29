@@ -11,10 +11,9 @@
 #How many starting numbers below ten million will arrive at 89?
 
 from math import factorial
+from time import time
 
-limit = 10**6
-
-hash567 = dict()
+t = time()
 
 def sqsum(num):
 	total = 0
@@ -32,15 +31,17 @@ def getchain(num):
 def perms(strnum):
 	nume = factorial(len(strnum))
 	deno = 1
-	for i in range(1,10):
+	for i in range(0,10):
 		deno *= factorial(strnum.count(str(i)))
 	return nume/deno
 
+chain1 = set()
 for num in range(1, 568):
-	hash567.update({num:getchain(num)})
+	if getchain(num) == 1: chain1.add(num)
 
 count = 0
-for a in range(0, 10):
+
+for a in range(10):
 	for b in range(a, 10):
 		for c in range(b, 10):
 			for d in range(c, 10):
@@ -49,7 +50,10 @@ for a in range(0, 10):
 						for g in range(max(1,f), 10):
 							num = map(str,[a,b,c,d,e,f,g])
 							num = ''.join(num)
-							if getchain(int(num)) == 89: count += perms(num)
+							if sqsum(int(num)) in chain1:
+								#print num, perms(num)
+								count += perms(num)
 
-print count
+print (10**7 -1) - count, time() - t
 
+#print chain1

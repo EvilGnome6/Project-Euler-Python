@@ -10,7 +10,7 @@
 
 #How many starting numbers below ten million will arrive at 89?
 
-limit = 10**6
+limit = 10**7
 
 set1 = set([1])
 set89 = set([89])
