@@ -21,10 +21,17 @@ from itertools import combinations
 digits = [0,1,2,3,4,5,6,7,8,9]
 
 combos = list(combinations(digits, 6))
+solutions = set()
 
 count = 0
 for die1 in combos:
 	for die2 in combos:
+		die1 = set(die1)
+		die2 = set(die2)
+		if 6 in die1: die1.add(9)
+		if 9 in die1: die1.add(6)
+		if 6 in die2: die2.add(9)
+		if 9 in die2: die2.add(6)
 
 		if 0 in die1 and 1 in die2: match = True
 		elif 0 in die2 and 1 in die1: match = True
@@ -36,9 +43,7 @@ for die1 in combos:
 			else: match = False
 		
 		if match == True:
-			if 0 in die1 and 6 in die2: match = True
-			elif 0 in die1 and 9 in die2: match = True
-			elif 0 in die2 and 6 in die1: match = True
+			if 0 in die1 and 9 in die2: match = True
 			elif 0 in die2 and 9 in die1: match = True
 			else: match = False
 			
@@ -58,9 +63,7 @@ for die1 in combos:
 			else: match = False
 			
 		if match == True:
-			if 4 in die1 and 6 in die2: match = True
-			elif 4 in die1 and 9 in die2: match = True
-			elif 4 in die2 and 6 in die1: match = True
+			if 4 in die1 and 9 in die2: match = True
 			elif 4 in die2 and 9 in die1: match = True
 			else: match = False
 			
@@ -72,5 +75,6 @@ for die1 in combos:
 
 		if match == True:
 			count += 1
-			print die1, die2, count, count/2
+
+print count/2
 	
