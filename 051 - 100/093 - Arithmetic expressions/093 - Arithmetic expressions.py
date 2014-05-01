@@ -18,21 +18,54 @@ from itertools import permutations
 import operator
 
 def targtest(digits,targ):
-	ops={0:operator.add, 1:operator.sub, 2:operator.mul, 3:operator.div }
+	ops={ 0:operator.add, 1:operator.sub, 2:operator.mul, 3:operator.div, 4:operator.add, 5:operator.sub, 6:operator.mul, 7:operator.div }
 	perms = list(permutations(digits))
 	for p in perms:
-		for i in range(4):
+		for i in range(8):
 			func = ops[i]
-			result = func(p[0], p[1])
-			for j in range(4):
+			if i < 4: result = func(p[0], p[1])
+			else: result = func(p[1], p[0])
+
+			for j in range(8):
 				func = ops[j]
-				result = func(result,p[2])
-				for k in range(4):
+				if i < 4:
+					if func == ops[3] and p[2] == 0: continue
+					result = func(result,p[2])
+				else:
+					if func == ops[3] and result == 0: continue
+					result = func(p[2], result)
+
+				for k in range(8):
 					func = ops[k]
-					result = func(result,p[3])
+					if i < 4:
+						if func == ops[3] and p[3] == 0: continue
+						result = func(result, p[3])
+					else:
+						if func == ops[3] and result == 0: continue
+						result = func(p[3], result)
+					
 					if result == targ: return True
+			
 	return False
 
-digits = [1.0,2.0,3.0,4.0]
-print targtest(digits,3)
+maxlen = 0
+maxset = []
 
+for a in range(1,10):
+	for b in range(a+1, 10):
+		for c in range(b+1, 10):
+			for d in range(c+1, 10):
+				digits = [float(a), float(b), float(c), float(d)]
+				targ = 1
+				while True:
+					if targtest(digits, targ) == False:
+						if maxlen < targ-1:
+							maxlen = targ-1
+							maxset = digits
+						break
+					targ += 1
+
+for i in range(1, 40):
+	print i, targtest([1.0, 2.0, 3.0, 4.0], i)
+
+print maxset, maxlen
