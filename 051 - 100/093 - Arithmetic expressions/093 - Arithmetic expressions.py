@@ -23,7 +23,16 @@ def targtest(digits,targ):
 	for p in perms:
 		for i in range(4):
 			func = ops[i]
-			print func(p[0], p[1])
+			result = func(p[0], p[1])
+			for j in range(4):
+				func = ops[j]
+				result = func(result,p[2])
+				for k in range(4):
+					func = ops[k]
+					result = func(result,p[3])
+					if result == targ: return True
+	return False
 
-digits = [1,2,3,4]
-print targtest(digits,1)
+digits = [1.0,2.0,3.0,4.0]
+print targtest(digits,3)
+
