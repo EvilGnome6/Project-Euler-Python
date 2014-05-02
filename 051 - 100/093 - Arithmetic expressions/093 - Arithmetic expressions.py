@@ -16,35 +16,24 @@
 
 from itertools import permutations
 import operator
+from time import time
+t = time()
 
 def targtest(digits,targ):
-	ops={ 0:operator.add, 1:operator.sub, 2:operator.mul, 3:operator.div, 4:operator.add, 5:operator.sub, 6:operator.mul, 7:operator.div }
+	ops={ 0:operator.add, 1:operator.sub, 2:operator.mul, 3:operator.div }
 	perms = list(permutations(digits))
 	for p in perms:
-		for i in range(8):
+		for i in range(4):
 			func = ops[i]
 			if i < 4: result = func(p[0], p[1])
-			else: result = func(p[1], p[0])
-
-			for j in range(8):
+			for j in range(4):
 				func = ops[j]
-				if i < 4:
-					if func == ops[3] and p[2] == 0: continue
-					result = func(result,p[2])
-				else:
-					if func == ops[3] and result == 0: continue
-					result = func(p[2], result)
-
-				for k in range(8):
-					func = ops[k]
-					if i < 4:
-						if func == ops[3] and p[3] == 0: continue
-						result = func(result, p[3])
-					else:
-						if func == ops[3] and result == 0: continue
-						result = func(p[3], result)
-					
-					if result == targ: return True
+				for k in range(4):
+					func1 = ops[i]
+					func2 = ops[j]
+					func3 = ops[k]
+					if func3(func2(func1(p[0], p[1]), p[2]), p[3]) == targ: return True # a+b+c+d
+					if func3(func1(p[0],func2(p[1],p[2])), p[3]) == targ: return True #a+(b+c)+d
 			
 	return False
 
@@ -65,7 +54,4 @@ for a in range(1,10):
 						break
 					targ += 1
 
-for i in range(1, 40):
-	print i, targtest([1.0, 2.0, 3.0, 4.0], i)
-
-print maxset, maxlen
+print maxset, maxlen, time()-t
