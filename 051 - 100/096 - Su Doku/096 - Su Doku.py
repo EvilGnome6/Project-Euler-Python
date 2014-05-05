@@ -46,31 +46,42 @@ def getbox(puzzle, r, c):
 			box.append(puzzle[rrange[i]][crange[j]])
 	return box
 
-def nakedsingle(puzzle):
+def solve(puzzle):
+	solved = 0
+	
+	poss = [[range(1,10) for i in range(9)] for j in range(9)]
 	for r in range(9):
 		for c in range(9):
-			if puzzle[r][c] != 0: continue
-			poss = range(1,10)
-			row = getrow(puzzle, r, c)
-			col = getcol(puzzle, r, c)
-			box = getbox(puzzle, r, c)
-#			print row
-#			print col
-#			print box
-			for p in range(1,10):
-				if p in row or p in col or p in box:
-					poss.remove(p)
-			if len(poss) == 1:
-				print poss, r, c
-				puzzle[r][c] = poss[0]
-	print "done"
-	return puzzle
+			if puzzle[r][c] != 0: poss[r][c] = []
 
-puzzle = getpuzzle(1)
+	while True:
+		solved = 0
+		for r in range(9):
+			for c in range(9):
+				if puzzle[r][c] != 0: 
+					poss[r][c] = []
+					continue
+				row = getrow(puzzle, r, c)
+				col = getcol(puzzle, r, c)
+				box = getbox(puzzle, r, c)
+				for p in range(1,10):
+					if p in row or p in col or p in box:
+						if p in poss[r][c]: poss[r][c].remove(p)
+				if len(poss[r][c]) == 1:
+					puzzle[r][c] = poss[r][c][0]
+					solved += 1
+#					print poss, r, c, solved
+
+		if solved == 0:
+			for r in range(9):
+				print poss[r]
+			return puzzle
+
+puzzle = getpuzzle(2)
 for r in puzzle: print r
 print
 
-for i in range(8):
-	puzzle = nakedsingle(puzzle)
+solve(puzzle)
 
 for r in puzzle: print r
+print
