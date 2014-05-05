@@ -11,6 +11,9 @@
 
 #Find the smallest member of the longest amicable chain with no element exceeding one million.
 
+from time import time
+
+t = time()
 
 def nextnum(number):
 	divisors = []
@@ -19,43 +22,24 @@ def nextnum(number):
 			divisors.append(i)
 			divisors.append(number/i)
 	return sum(divisors)+1
-	
-#print nextnum(12496), nextnum(14288), nextnum(15472), nextnum(14536), nextnum(14264)
-#print nextnum(12495), nextnum(12129), nextnum(5343), nextnum(2385), nextnum(1827), nextnum(1293), nextnum(435), nextnum(285), nextnum(195), nextnum(113)
-
-chain = []
-n = 1064
-while True:
-	chain.append(n)
-	n = nextnum(n)
-	if n in chain: break
-print chain, len(chain)
 
 maxchain = set()
-pathto1 = set([1])
-pathtomax = set([10**6])
+nonmax = set([1])
 
 for i in range(2, 10**5):
 	chain = set()
 	chain.add(i)
-	n = nextnum(i)
+	n = i
 	while True:
-		if n in pathto1:
-			pathto1.update(chain)
-			chain = set()
-			break
-		if n > 10**6:
-			pathtomax.update(chain)
-			chain = set()
-			break
-		if n in pathtomax:
-			pathtomax.update(chain)
+		n = nextnum(n)
+		if n in nonmax or n < i or n == 1 or n > 10**6:
+			nonmax.update(chain)
 			chain = set()
 			break
 		if n not in chain: chain.add(n)
 		else: break
-		n = nextnum(n)
-	if len(chain) > len(maxchain): maxchain = chain
+	if n == i and len(chain) > len(maxchain): 
+		nonmax.update(maxchain)
+		maxchain = chain
 
-print len(pathto1), len(pathtomax)
-print maxchain, min(maxchain), len(maxchain)
+print min(maxchain), time()-t
