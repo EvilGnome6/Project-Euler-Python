@@ -45,6 +45,20 @@ def getbox(puzzle, r, c):
 		for j in range(3):
 			box.append(puzzle[rrange[i]][crange[j]])
 	return box
+	
+def getboxpos(r, c, p):
+	if r >= 0 and r <= 2: r = 0
+	elif r >= 3 and r<= 5: r = 3
+	else: r = 6
+	if c >= 0 and c <= 2: c = 0
+	elif c >= 3 and c <= 5: c = 3
+	else: c = 6
+	if p >= 0 and p <= 2: br, bc = 0, p
+	elif p >= 3 and p<= 5: br, bc = 1, p-3
+	else: br, bc = 2, p-6
+	r += br 
+	c += bc
+	return[r,c]
 
 def solve(puzzle):
 	solved = 0
@@ -61,27 +75,93 @@ def solve(puzzle):
 				if puzzle[r][c] != 0: 
 					poss[r][c] = []
 					continue
-				row = getrow(puzzle, r, c)
-				col = getcol(puzzle, r, c)
-				box = getbox(puzzle, r, c)
+				#Look for naked singles
+				puzrow = getrow(puzzle, r, c)
+				puzcol = getcol(puzzle, r, c)
+				puzbox = getbox(puzzle, r, c)
 				for p in range(1,10):
-					if p in row or p in col or p in box:
+					if p in puzrow or p in puzcol or p in puzbox:
 						if p in poss[r][c]: poss[r][c].remove(p)
 				if len(poss[r][c]) == 1:
 					puzzle[r][c] = poss[r][c][0]
+					poss[r][c] = []
 					solved += 1
-#					print poss, r, c, solved
-
+				
+				#Look for hidden singles
+				if solved == 0:
+					posrow = getrow(poss, r, c)
+					poscol = getcol(poss, r, c)
+					posbox = getbox(poss, r, c)
+					for n in range(1, 10):
+						count = 0
+						for b in posrow:
+							if n in b and n not in puzrow: count += 1
+						if count == 1:
+							for i in range(9):
+								if n in posrow[i]:
+#									print r, i, posrow, n
+									puzzle[r][i] = n
+									poss[r][i] = []
+									solved += 1
+						count = 0
+						for b in poscol:
+							if n in b and n not in puzcol: count += 1
+						if count == 1:
+							for i in range(9):
+								if n in poscol[i]:
+#									print r, i, puzcol, n
+									puzzle[i][c] = n
+									poss[i][c] = []
+									solved += 1
+						
+						count = 0
+						for b in posbox:
+							if n in b and n not in puzbox: count += 1
+						if count == 1:
+							for i in range(9):
+								if n in posbox[i]: p = i
+							pos = getboxpos(r, c, p)
+							puzzle[pos[0]][pos[1]] = n
+							poss[pos[0]][pos[1]] = []
+							solved += 1
+							
+					#Look for naked pairs
+					if solved == 0:
+						pairlist = []
+						pair = False
+						for i in range(9):
+							if len(posrow[i]) == 2: 
+								if posrow[i] in pairlist:
+									pairlist = posrow[i]
+									pair = True
+									break
+								else: pairlist.append(posrow[i])
+								
+						if pair == True: 
+							for n in pairlist:
+								for i in range(9):
+									if posrow[i] != pairlist and n in posrow[i]: posrow[i].remove(n)
+									
+							print pairlist
+	
 		if solved == 0:
-			for r in range(9):
-				print poss[r]
+			for i in range(9):
+#				print poss[i]
+	 			print getcol(poss, 0, i)
+#			for i in range(3):
+#				for j in range(3):
+#					print getbox(poss, i*3, j*3)
+#			print getbox(puzzle, 3, 4)
+#			print getbox(poss, 3, 4)
 			return puzzle
 
-puzzle = getpuzzle(2)
+puzzle = getpuzzle(48)
 for r in puzzle: print r
 print
 
 solve(puzzle)
 
-for r in puzzle: print r
 print
+for r in puzzle: print r
+
+
