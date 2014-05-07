@@ -127,6 +127,7 @@ def solve(puzzle):
 							
 					#Look for naked pairs
 					if solved == 0:
+						
 						pairlist = []
 						pair = False
 						for i in range(9):
@@ -136,18 +137,60 @@ def solve(puzzle):
 									pair = True
 									break
 								else: pairlist.append(posrow[i])
-								
 						if pair == True: 
 							for n in pairlist:
 								for i in range(9):
 									if posrow[i] != pairlist and n in posrow[i]: posrow[i].remove(n)
-									
-							print pairlist
+						
+						pairlist = []
+						pair = False
+						for i in range(9):
+							if len(poscol[i]) == 2:
+								if poscol[i] in pairlist:
+									pairlist = poscol[i]
+									pair = True
+									break
+								else: pairlist.append(poscol[i])
+						if pair == True:
+							for n in pairlist:
+								for i in range(9):
+									if poscol[i] != pairlist and n in poscol[i]: poscol[i].remove(n)
+							
+						pairlist = []
+						pair = False
+						for i in range(9):
+							if len(posbox[i]) == 2:
+								if posbox[i] in pairlist:
+									pairlist = posbox[i]
+									pair = True
+									break
+								else: pairlist.append(posbox[i])
+						if pair == True:
+							for n in pairlist:
+								for i in range(9):
+									if posbox[i] != pairlist and n in posbox[i]: posbox[i].remove(n)
+
+					#look for hidden pairs
+					rcount, ccount, bcount = 0, 0, 0
+					rpair, cpair, bpair = [], [], []
+					rmatch, cmatch, bmatch  = [], [], []
+					if solved == 0:
+						for i in range(1, 10):
+							for j in range(i+1, 10):
+								for k in range(9):
+									if i in posrow[k] and j in posrow[k] and len(posrow[k]) != 2: 
+										rcount, rpair = rcount+1, [i,j]
+										rmatch.append(k)
+									if count == 2 and rpair == [4,7]: print rpair, rmatch
+									rmatch = []
+
+#									for l in range(9):
+#										if rcount == 2 and rpair[0] in posrow[l] and l not in rmatch: count = 0
 	
 		if solved == 0:
 			for i in range(9):
-#				print poss[i]
-	 			print getcol(poss, 0, i)
+				print poss[i]
+#				print getcol(poss, 0, i)
 #			for i in range(3):
 #				for j in range(3):
 #					print getbox(poss, i*3, j*3)
@@ -155,7 +198,7 @@ def solve(puzzle):
 #			print getbox(poss, 3, 4)
 			return puzzle
 
-puzzle = getpuzzle(48)
+puzzle = getpuzzle(6)
 for r in puzzle: print r
 print
 
