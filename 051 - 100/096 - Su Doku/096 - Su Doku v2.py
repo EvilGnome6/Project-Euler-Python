@@ -76,16 +76,12 @@ def solve(puzzle):
 		elif isvalid(puzzle, r, c) == True: i += 1
 
 total = 0
-for i in range(1, 1):
+for i in range(6, 7):
 	puzzle = getpuzzle(i)
 	solve(puzzle)
 	number = str(puzzle[0][0]) + str(puzzle[0][1]) + str(puzzle[0][2])
 	total += int(number)
 
 print total, time() - t
-
-puzzle = [[8,0,0,0,0,0,0,0,0],[0,0,3,6,0,0,0,0,0],[0,7,0,0,9,0,2,0,0],[0,5,0,0,0,7,0,0,0],[0,0,0,0,4,5,7,0,0],[0,0,0,1,0,0,0,3,0],[0,0,1,0,0,0,0,6,8],[0,0,8,5,0,0,0,1,0],[0,9,0,0,0,0,4,0,0]]
-
-solve(puzzle)
 
 for row in puzzle: print row
