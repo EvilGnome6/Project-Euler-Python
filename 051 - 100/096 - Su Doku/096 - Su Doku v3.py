@@ -50,14 +50,12 @@ def getbox(puzzle, r, c):
 			box.append(puzzle[rrange[i]][crange[j]])
 	return box
 	
-def isvalid(puzzle, r, c):
+def isvalid(puzzle, r, c, p):
 	row = getrow(puzzle, r, c)
 	col = getcol(puzzle, r, c)
 	box = getbox(puzzle, r, c)
-	if row.count(puzzle[r][c]) > 1: return False
-	if col.count(puzzle[r][c]) > 1: return False
-	if box.count(puzzle[r][c]) > 1: return False
-	return True
+	if p in row or p in col or p in box: return False
+	else: return True
 	
 def solve(puzzle):
 	# make a list of unknown squares
@@ -65,15 +63,56 @@ def solve(puzzle):
 	for r in range(9):
 		for c in range(9):
 			if puzzle[r][c] == 0: unknown.append((r,c))
-	# step through the unknown squares. Increment by one and if valid, step to the next. If greater than 9, set to zero and jump back a step.
+	# try to use deduction to solve the puzzle
+	while True:
+		solved = 0
+		for grid in unknown:
+			dr, dc = grid[0], grid[1]
+			if puzzle[dr][dc] == 0:
+				poss = []
+				for p in range(1, 10):
+					if isvalid(puzzle, dr, dc, p) == True: poss.append(p)
+				if len(poss) == 1:
+#						print dr,dc,poss
+						solved += 1
+						puzzle[dr][dc] = poss[0]
+		if solved == 0: break
+	# test if deduction solved puzzle and break if true.
+	unknown = []
+	for r in range(9):
+		for c in range(9):
+			if puzzle[r][c] == 0: unknown.append((r,c))
+	if len(unknown) == 0: return
+	
+	# sort unsolved cells with two possibilities to top of list
+#	for i in range(len(unknown)):
+#		r, c = unknown[i][0], unknown[i][1]
+#		poss = []
+#		for p in range(1, 10):
+#			if isvalid(puzzle, r, c, p) == True: poss.append(p)
+#		if len(poss) == 2: #unknown.insert(0, unknown.pop(i)):
+#			for j in range(i, len(unknown)): unknown.insert(0, unknown.pop(j))
+#			break
+	
+	# solve puzzle using brute force
+	backtrack = False
 	i = 0
-	while i < (len(unknown)):
+	while i < len(unknown):
 		r, c = unknown[i][0], unknown[i][1]
-		puzzle[r][c] += 1
-		if puzzle[r][c] > 9:
-			puzzle[r][c] = 0
-			i -= 1
-		elif isvalid(puzzle, r, c) == True: i += 1
+		p = puzzle[r][c]
+		if p == 0  or backtrack == True:
+			while True:
+				p += 1
+				if p > 9:
+					backtrack = True
+					puzzle[r][c] = 0
+					break
+				if isvalid(puzzle, r, c, p) == True:
+					backtrack = False
+					puzzle[r][c] = p
+					break
+		if backtrack == False: i += 1
+		else: i -= 1
 
 total = 0
 for i in range(1, 51):
