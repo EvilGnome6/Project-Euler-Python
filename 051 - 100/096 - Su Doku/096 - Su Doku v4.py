@@ -49,56 +49,60 @@ def getbox(puzzle, r, c):
 		for j in range(3):
 			box.append(puzzle[rrange[i]][crange[j]])
 	return box
-	
-def isvalid(puzzle, r, c, p):
-	row = getrow(puzzle, r, c)
-	col = getcol(puzzle, r, c)
-	box = getbox(puzzle, r, c)
-	if p in row or p in col or p in box: return False
-	else: return True
 
+# function to return the possible numbers
 def getposs(puzzle):
+	# create a grid with all numbers in each node
 	poss = [[range(1,10) for i in range(9)] for j in range(9)]
 	for r in range(9):
 		for c in range(9):
+			# blank out any node that is solved
 			if puzzle[r][c] != 0: poss[r][c] = []
 			else:
+				# remove numbers that exist in that node's row, col or box
 				row, col, box = getrow(puzzle, r, c), getcol(puzzle, r, c), getbox(puzzle, r, c)
 				for p in range(1,10):
 					if p in row or p in col or p in box:
 						if p in poss[r][c]: poss[r][c].remove(p)
 	return poss
 
-def solve(puzzle):
-	# make a list of unknown squares
-	unknown = []
+# function to test if the puzzle is solved (no 0s in the grid)
+def issolved(puzzle):
 	for r in range(9):
 		for c in range(9):
-			if puzzle[r][c] == 0: unknown.append((r,c))
-	# solve puzzle using brute force
+			if puzzle[r][c] == 0: return False
+	return True
+
+# function to fetch the next unsolved node
+def getunsolved(puzzle):
+	# fetch a grid of possible values and return the first one with the shortest length
 	poss = getposs(puzzle)
-	for p in poss: print p
-	backtrack = False
-	i = 0
-	while i < len(unknown):
-		r, c = unknown[i][0], unknown[i][1]
-		p = puzzle[r][c]
-		if p == 0  or backtrack == True:
-			while True:
-				p += 1
-				if p > 9:
-					backtrack = True
-					puzzle[r][c] = 0
-					break
-				if isvalid(puzzle, r, c, p) == True:
-					backtrack = False
-					puzzle[r][c] = p
-					break
-		if backtrack == False: i += 1
-		else: i -= 1
+	for i in range(1, 9):
+		for r in range(9):
+			for c in range(9):
+				if len(poss[r][c]) == i: return (r, c, poss[r][c])
+
+# main solver function
+def solve(puzzle):
+	# returns true if the puzzle is solved
+	if issolved(puzzle) == True: return True
+	else:
+		# fetch the next unsolved node
+		node = getunsolved(puzzle)
+		# if there are no unsolved nodes, then this must be a dead end so return false
+		if node == None: return False
+		r, c, poss = node[0], node[1], node[2] 
+		for p in poss:
+			# set the value of the node to a possible number and recursively call the function again
+			# if the path is not valid, set the node to zero and backtrack
+			puzzle[r][c] = p
+			if solve(puzzle) == True: return True
+			else:
+				puzzle[r][c] = 0
+	return False
 
 total = 0
-for i in range(3, 4):
+for i in range(1, 51):
 	puzzle = getpuzzle(i)
 	solve(puzzle)
 	number = str(puzzle[0][0]) + str(puzzle[0][1]) + str(puzzle[0][2])
@@ -106,4 +110,4 @@ for i in range(3, 4):
 
 print total, time() - t
 
-for row in puzzle: print row
+#for row in puzzle: print row
