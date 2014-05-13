@@ -50,14 +50,6 @@ def getbox(puzzle, r, c):
 			box.append(puzzle[rrange[i]][crange[j]])
 	return box
 
-# function to test if a possible number is valid
-def isvalid(puzzle, r, c, p):
-	row = getrow(puzzle, r, c)
-	col = getcol(puzzle, r, c)
-	box = getbox(puzzle, r, c)
-	if p in row or p in col or p in box: return False
-	else: return True
-
 # function to return the possible numbers
 def getposs(puzzle):
 	# create a grid with all numbers in each node
@@ -83,7 +75,7 @@ def issolved(puzzle):
 
 # function to fetch the next unsolved node
 def getunsolved(puzzle):
-	# fetch a grid os possible values and return the first one with the shortest length
+	# fetch a grid of possible values and return the first one with the shortest length
 	poss = getposs(puzzle)
 	for i in range(1, 9):
 		for r in range(9):
@@ -118,4 +110,4 @@ for i in range(1, 51):
 
 print total, time() - t
 
-for row in puzzle: print row
+#for row in puzzle: print row
