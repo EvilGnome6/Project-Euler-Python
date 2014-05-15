@@ -59,16 +59,14 @@ def testmatch(match1, match2):
 				return match1, match2, firstsquare, secondsquare
 
 squares = []
-for i in range(10**1, 10**5):
+for i in range(10**1, 10**4):
 	number = i**2
 	if length(number) == 5:
 		squares.append(number)
+	if length(number) > 5: break
 squares.reverse()
 
-sortsquares = []
-for i in range(len(squares)):
-	i = squares[i]
-	sortsquares.append(''.join(sorted(str(i))))
+print squares[0], squares[-1]
 
 match1 = words[1042]
 match2 = words[1047]
