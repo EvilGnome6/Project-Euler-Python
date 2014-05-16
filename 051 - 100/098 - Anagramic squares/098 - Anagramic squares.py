@@ -28,8 +28,6 @@ for i in range(len(sortwords)):
 		        match.append(words[j])
 		if match not in matchwords: matchwords.append(match)
 		
-for match in matchwords: print match, words.index(match[0]), words.index(match[1])
-
 from math import log10
 def length(number):
 	return int(log10(number))+1
@@ -58,19 +56,21 @@ def testmatch(match1, match2):
 			if secondsquare in squares: 
 				return match1, match2, firstsquare, secondsquare
 
-squares = []
-for i in range(10**1, 10**5):
-	number = i**2
-	if length(number) == 5:
-		squares.append(number)
-squares.reverse()
+def getsquares(digits):
+	squares = []
+	for i in range(int((10**(digits-1))**0.5), int((10**digits)**0.5)):
+		number = i**2
+		if length(number) == digits:
+			squares.append(number)
+	squares.reverse()
+	return squares
 
-sortsquares = []
-for i in range(len(squares)):
-	i = squares[i]
-	sortsquares.append(''.join(sorted(str(i))))
+for match in matchwords: print match, words.index(match[0]), words.index(match[1]), len(match[0])
 
 match1 = words[1042]
 match2 = words[1047]
+digits = len(match1)
+squares = []
+squares = getsquares(digits)
 
 print testmatch(match1, match2)
