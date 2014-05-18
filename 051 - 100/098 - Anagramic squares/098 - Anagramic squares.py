@@ -56,6 +56,7 @@ def testmatch(match1, match2):
 			if secondsquare in squares: 
 				return match1, match2, firstsquare, secondsquare
 
+<<<<<<< HEAD
 def getsquares(digits):
 	squares = []
 	for i in range(int((10**(digits-1))**0.5), int((10**digits)**0.5)):
@@ -66,6 +67,17 @@ def getsquares(digits):
 	return squares
 
 for match in matchwords: print match, words.index(match[0]), words.index(match[1]), len(match[0])
+=======
+squares = []
+for i in range(10**1, 10**4):
+	number = i**2
+	if length(number) == 5:
+		squares.append(number)
+	if length(number) > 5: break
+squares.reverse()
+
+print squares[0], squares[-1]
+>>>>>>> FETCH_HEAD
 
 match1 = words[1042]
 match2 = words[1047]
