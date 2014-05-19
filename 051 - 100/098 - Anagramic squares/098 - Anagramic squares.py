@@ -6,6 +6,10 @@
 
 #NOTE: All anagrams formed must be contained in the given text file.
 
+from time import time
+t = time()
+
+# copy all the words in the words.txt file to a words list
 words = []
 file = open("words.txt")
 words = file.readline()
@@ -13,11 +17,12 @@ words = words.replace('\"', "")
 words = words.split(',')
 words.sort(lambda y,x: cmp(len(x), len(y)))
 
-
+# create a second list of words with the letters sorted
 sortwords = []
 for word in words:
 	sortwords.append(''.join(sorted(word)))
 
+# search through the sorted words looking for duplicates and add to matchwords.
 matchwords = []
 for i in range(len(sortwords)):
 	word = sortwords[i]
@@ -27,11 +32,23 @@ for i in range(len(sortwords)):
 		    if k == word:
 		        match.append(words[j])
 		if match not in matchwords: matchwords.append(match)
-		
+
+# function to return the length of an integer
 from math import log10
 def length(number):
 	return int(log10(number))+1
 
+# function to return a list of squares with a given number of digits
+def getsquares(digits):
+	squares = []
+	for i in range(int((10**(digits-1))**0.5), int((10**digits)**0.5)):
+		number = i**2
+		if length(number) == digits:
+			squares.append(number)
+	squares.reverse()
+	return squares
+
+# function to test if a pair of anagrams can be mapped to a pair of square numbers
 def testmatch(match1, match2):
 	for square in squares:
 		firstsquare = square
@@ -56,21 +73,12 @@ def testmatch(match1, match2):
 			if secondsquare in squares: 
 				return match1, match2, firstsquare, secondsquare
 
-def getsquares(digits):
-	squares = []
-	for i in range(int((10**(digits-1))**0.5), int((10**digits)**0.5)):
-		number = i**2
-		if length(number) == digits:
-			squares.append(number)
-	squares.reverse()
-	return squares
-
-for match in matchwords: print match, words.index(match[0]), words.index(match[1]), len(match[0])
-
-match1 = words[1042]
-match2 = words[1047]
-digits = len(match1)
-squares = []
-squares = getsquares(digits)
-
-print testmatch(match1, match2)
+# loop through the list of matches to find the first pair that matches
+for match in matchwords:
+	match1, match2 = match[0], match[1]
+	digits = len(match1)
+	squares = getsquares(digits)
+	matchtest = testmatch(match1, match2)
+	if matchtest != None:
+		print matchtest, time()-t
+		break
