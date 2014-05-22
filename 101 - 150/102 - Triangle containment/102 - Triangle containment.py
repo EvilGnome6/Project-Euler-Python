@@ -13,14 +13,18 @@
 
 #NOTE: The first two examples in the file represent the triangles in the example given above.
 
+triangles = []
+file = open("triangles.txt")
 
-#a, b, c = [-2,3], [-1,-4], [4,-5]
-#a, b, c = [-2,1], [-3,-4], [3,-3]
-
-a, b, c = [-340,495], [-153,-910], [835,-947]
-a, b, c = [-175,41], [-421,-714], [574,-645]
+for i in range(1000):
+	line = file.readline()
+	line = line.strip()
+	points = line.split(',')
+	pointa, pointb, pointc = [int(points[0]),int(points[1])], [int(points[2]),int(points[3])], [int(points[4]),int(points[5])]
+	triangles.append([pointa, pointb, pointc])
 
 def getslope(a,b):
+	if (float(b[0])-a[0]) == 0: return 100000
 	return (float(b[1])-a[1])/(float(b[0])-a[0])
 
 def getyint(a,b):
@@ -29,6 +33,7 @@ def getyint(a,b):
 
 def getxint(a,b):
 	m = getslope(a,b)
+	if m == 0: m = 0.00001
 	b = getyint(a,b)
 	return (-b/m)
 
@@ -50,26 +55,20 @@ def containsorigin(a, b, c):
 	boundquad = []
 	
 	xminmax = getxminmax(a,b)
-	if abxint[0] > xminmax[0] and abxint[0] < xminmax[1]: boundquad.append(abxint)
+	if abxint[0] >= xminmax[0] and abxint[0] <= xminmax[1]: boundquad.append(abxint)
 	yminmax = getyminmax(a,b)
-	if abyint[1] > yminmax[0] and abyint[1] < yminmax[1]: boundquad.append(abyint)
-#	print abxint, abyint, a, b, xminmax, yminmax
+	if abyint[1] >= yminmax[0] and abyint[1] <= yminmax[1]: boundquad.append(abyint)
 	
 	xminmax = getxminmax(a,c)
-	if acxint[0] > xminmax[0] and acxint[0] < xminmax[1]: boundquad.append(acxint)
+	if acxint[0] >= xminmax[0] and acxint[0] <= xminmax[1]: boundquad.append(acxint)
 	yminmax = getyminmax(a,c)
-	if acyint[1] > yminmax[0] and acyint[1] < yminmax[1]: boundquad.append(acyint)
-#	print acxint, acyint, a, c, xminmax, yminmax
+	if acyint[1] >= yminmax[0] and acyint[1] <= yminmax[1]: boundquad.append(acyint)
 	
 	xminmax = getxminmax(b,c)
-	if bcxint[0] > xminmax[0] and bcxint[0] < xminmax[1]: boundquad.append(bcxint)
+	if bcxint[0] >= xminmax[0] and bcxint[0] <= xminmax[1]: boundquad.append(bcxint)
 	yminmax = getyminmax(b,c)
-	if bcyint[1] > yminmax[0] and bcyint[1] < yminmax[1]: boundquad.append(bcyint)
-#	print bcyint, b, c, yminmax
-#	print bcxint, bcyint, b, c, xminmax, yminmax
+	if bcyint[1] >= yminmax[0] and bcyint[1] <= yminmax[1]: boundquad.append(bcyint)
 
-#	print acxint, acyint
-#	print bcxint, bcyint
 	for intercept in boundquad:
 		if intercept[0] == 0 and intercept[1] > 0: north = True
 		elif intercept[0] == 0 and intercept[1] < 0: south = True
@@ -78,4 +77,9 @@ def containsorigin(a, b, c):
 	if north == True and south == True and east == True and west == True: return True
 	else: return False
 	
-print containsorigin(a,b,c)
+count = 0
+for triangle in triangles:
+	a, b, c = triangle[0], triangle[1], triangle[2]
+	if containsorigin(a,b,c) == True:
+		count += 1
+print count
